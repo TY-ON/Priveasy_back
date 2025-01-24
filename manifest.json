@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Privacy Policy Detector",
+    "version": "1.0",
+    "description": "Automatically detects and parses privacy policy links.",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "src/background/background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["src/content/contentScript.js"]
+      }
+    ]
+  }
+  

@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "nodemon ./server"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsdom": "^26.0.0",
+    "nodemon": "^3.1.9",
+    "puppeteer": "^24.1.1"
+  }
+}

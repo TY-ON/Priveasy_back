@@ -10,7 +10,7 @@
       const footer = document.querySelector("footer"); // <footer> 태그 선택
       if (!footer) return null; // 푸터가 없으면 null 반환
   
-      const links = footer.querySelectorAll<HTMLAnchorElement>("a"); // 푸터 내 모든 링크
+      const links = footer.querySelectorAll<HTMLAnchorElement>("a[href]"); // href 속성이 있는 링크만 선택
       for (const link of links) {
         if (privacyPolicyRegex.test(link.textContent || "")) {
           return link.href; // 찾은 링크 반환
@@ -24,7 +24,7 @@
      * @returns {string | null} 찾은 링크의 href (없으면 null)
      */
     function findLinkInPage(): string | null {
-      const links = document.querySelectorAll<HTMLAnchorElement>("a"); // 페이지 내 모든 링크
+      const links = document.querySelectorAll<HTMLAnchorElement>("a[href]"); // href 속성이 있는 링크만 선택
       for (const link of links) {
         if (privacyPolicyRegex.test(link.textContent || "")) {
           return link.href; // 찾은 링크 반환

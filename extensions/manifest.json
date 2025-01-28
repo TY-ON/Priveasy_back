@@ -14,7 +14,7 @@
       }
     ],
     "action": {
-      "default_popup": "http://localhost:3000/popup",
+      "default_popup": "extensions/popup.ts",
       "default_icon": "/icon.png"
     }
   }

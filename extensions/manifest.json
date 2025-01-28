@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Privacy Policy Finder",
+    "version": "1.0",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "extensions/background.ts"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["extensions/contentScript.ts"]
+      }
+    ],
+    "action": {
+      "default_popup": "http://localhost:3000/popup",
+      "default_icon": "/icon.png"
+    }
+  }
+  

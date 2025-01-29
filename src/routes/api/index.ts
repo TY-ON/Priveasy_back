@@ -1,16 +1,8 @@
-import express, { Express, Request, Response } from 'express';
+import express from 'express';
 const router = express.Router();
 
-import { analyzePolicy } from './analyzePolicy';
+const analyzePolicy = require('./analyzePolicy');
 
-
-router.get('/analyzePolicy', async (req: Request, res: Response) => {
-    const result = await analyzePolicy(req, res);
-    if (!result) {
-        res.status(404).send("no url");
-        return;
-    }
-    res.status(200).send(result);
-});
+router.use('/analyzePolicy', analyzePolicy);
 
 module.exports = router;

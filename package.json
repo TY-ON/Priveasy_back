@@ -1,7 +1,8 @@
 {
   "scripts": {
     "compile": "tsc && node ./build/src/app.js",
-    "start": "nodemon -e ts --exec \"npm run compile\""
+    "start": "nodemon -e ts --exec \"npm run compile\"",
+    "dev" : "nodemon src/app.ts"
   },
   "dependencies": {
     "express": "^4.21.2",

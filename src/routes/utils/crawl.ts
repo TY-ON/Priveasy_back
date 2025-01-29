@@ -15,33 +15,45 @@ export async function getData(url: string): Promise<string>{
 	return data;
 }
 
-export async function crawlPrivacy(url: string): Promise<string>{
-
-    if (!url){
+export async function crawlPrivacy(url: string): Promise<string> {
+    if (!url) {
         return "failed";
     }
 
-	let data: string = await getData(url);
-	if (data) {
-		var html_dom = new DOMParser().parseFromString(data, 'text/html');
-		var victims = html_dom.querySelectorAll("a");
-		var href = undefined;
-		for (let i = 0; i < victims.length; i++) {
-			const victim = victims[i];
-			if (/개인.*정보.*처리.*(방침|약관)/.test(victim.text)){
-				href = victim.href;
-				break;
-			}
-		}
-	}
-	else {
-		return "failed";
-	}
-	
-	if (href) {
-		console.log(href);
-		const privacy = await getData(href);
-		return privacy;
-	}
-	return "failed";
+    let data: string = await getData(url);
+    if (!data) {
+        return "failed";
+    }
+
+    const html_dom = new DOMParser().parseFromString(data, 'text/html');
+    let href: string | undefined = undefined;
+
+    function findPrivacyLink(element: Element | Document): string | undefined {
+        const links = element.querySelectorAll<HTMLAnchorElement>("a[href]");
+        for (const link of links) {
+            if (/개인.*정보.*처리.*(방침|약관)/.test(link.textContent || "")) {
+                return link.href;
+            }
+        }
+        return undefined;
+    }
+
+    // 1. 푸터에서 먼저 검색
+    const footer = html_dom.querySelector("footer");
+    if (footer) {
+        href = findPrivacyLink(footer);
+    }
+
+    // 2. 푸터에서 못 찾으면 전체 페이지 검색
+    if (!href) {
+        href = findPrivacyLink(html_dom);
+    }
+
+    if (href) {
+        console.log(`Found Privacy Policy: ${href}`);
+        const privacy = await getData(href);
+        return privacy;
+    }
+
+    return "failed";
 }

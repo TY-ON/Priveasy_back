@@ -1,0 +1,12 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: priveasy_back
+    environment:
+      - PORT=3000
+    ports:
+      - "80:3000"
+    
+

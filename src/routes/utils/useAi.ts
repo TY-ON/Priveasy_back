@@ -1,26 +1,20 @@
-import { exec } from 'child_process';
-import path from 'path';
+import axios from 'axios';
 
 /**
- * Python 스크립트를 호출하여 AI 요약 생성
- * @param prompt - 요약할 텍스트
- * @returns 요약된 텍스트 또는 null
+ * Flask 서버에 AI 요약 요청
+ * @param privacyText - 개인정보처리방침 텍스트
+ * @returns 요약된 텍스트
  */
-export async function generateContentWithGemini(prompt: string): Promise<string | null> {
-    return new Promise((resolve, reject) => {
-        const pythonScriptPath = path.resolve(__dirname, '../../scripts/gemini');
+export async function generateContentWithGemini(privacyText: string): Promise<string | null> {
+    try {
+        const response = await axios.post('http://localhost:5001/summarize', { privacyText });
 
-        exec(`python3 ${pythonScriptPath} "${prompt}"`, (error, stdout, stderr) => {
-            if (error) {
-                console.error("Python Script Error:", error);
-                return reject(null);
-            }
-            if (stderr) {
-                console.error("Python Script Stderr:", stderr);
-                return reject(null);
-            }
-
-            resolve(stdout.trim());
-        });
-    });
+        if (response.data && response.data.summary) {
+            return response.data.summary;
+        }
+        return null;
+    } catch (error) {
+        console.error("Flask AI Summarization Error:", error);
+        return null;
+    }
 }

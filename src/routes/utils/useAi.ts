@@ -8,6 +8,7 @@ import axios from 'axios';
 export async function generateContentWithGemini(privacyText: string): Promise<string | null> {
     try {
         const response = await axios.post('http://localhost:5001/summarize', { privacyText });
+        //main.py에 post method 지정
 
         if (response.data && response.data.summary) {
             return response.data.summary;

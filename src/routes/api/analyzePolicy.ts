@@ -35,4 +35,25 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/test', async (req: Request, res: Response) => {
+    const url = req.query.url?.toString();
+    if (!url) {
+        res.status(404).send("no url");
+        return;
+    }
+
+    try {
+        const privacyText = await crawlPrivacy(url);
+        if (!privacyText) {
+            res.status(404).send("no privacy");
+            return;
+        }
+
+        res.status(200).send({"privacyText": privacyText});
+    } catch (error) {
+        console.error("AI summarization error:", error);
+        res.status(500).send("internal server error");
+    }
+});
+
 module.exports = router;

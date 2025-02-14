@@ -56,7 +56,7 @@ export async function crawlPrivacy(url: string): Promise<string> {
         for (const link of element.find("a")) {
 			// 못 찾음 -> url에서 다시 탐색
 			for (const link of element.find("a")) {
-				if (/privacy/i.test(html(link).attr('href') || "")) {
+				if (/^\/privacy|^https:\/\/.*\/privacy/i.test(html(link).attr('href') || "")) {
 					return html(link).attr('href');
 				}
 			}

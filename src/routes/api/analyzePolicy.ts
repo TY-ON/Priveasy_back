@@ -51,7 +51,7 @@ router.get('/test', async (req: Request, res: Response) => {
 
         res.status(200).send({"privacyText": privacyText});
     } catch (error) {
-        console.error("AI summarization error:", error);
+        console.error("crawling error:", error);
         res.status(500).send("internal server error");
     }
 });

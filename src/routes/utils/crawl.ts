@@ -75,7 +75,7 @@ export async function crawlPrivacy(url: string): Promise<string> {
 
                         // ✅ 클릭 후 페이지 이동 여부 체크 (최대 10초 기다림)
                         await page.evaluate((el:HTMLElement)=> el.click(), element);
-                        await Promise.race([
+                        await Promise.all([
                             page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 10000 }).catch(() => null),
                             delay(5000)
                         ]);
@@ -139,7 +139,7 @@ export async function crawlPrivacy(url: string): Promise<string> {
         }
 
         // ✅ 1. 푸터에서 개인정보처리방침 링크 찾기
-        const footer = html("#footer,footer");
+        const footer = html("#footer,footer,.footer");
         if (footer) {
             href = findPrivacyLinkUrl(footer) || findPrivacyLink(footer);
             if (!href) {
@@ -154,7 +154,7 @@ export async function crawlPrivacy(url: string): Promise<string> {
 
         // ✅ 2. 푸터에서 못 찾으면 전체 페이지 검색
         if (!href) {
-            href = findPrivacyLinkUrl(html('html')) || findPrivacyLink(html('html'));
+            href = findPrivacyLink(html('html')) || findPrivacyLinkUrl(html('html'));
             if (!href) {
                 console.log("Checking for clickable privacy button in full page...");
                 const clickedPrivacyData = await findClickablePrivacyButton(page);

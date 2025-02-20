@@ -20,7 +20,15 @@ export async function getData(url: string, browser: any): Promise<{ data: string
 export async function crawlPrivacy(url: string): Promise<string> {
     if (!url) return "failed";
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ 
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+          ],    
+    });
     let page;
 
     try {
@@ -94,13 +102,22 @@ export async function crawlPrivacy(url: string): Promise<string> {
         }
 
         function findPrivacyLink(element: cheerio.Cheerio): string | undefined {
+            let best_link: string | undefined = undefined;
+            let min_length = 1000;
+
             for (const link of element.find("a")) {
                 const href = html(link).attr('href');
-                if (/개인.*정보.*(처리).*(방침|약관)|Privacy.*Policy/i.test(html(link).text() || "")) {
-                    return href;
+                const text = html(link).text().replace(/\s/g, "");
+                console.log(href, text, text.length);
+                if (/개인.*정보.*(처리).*(방침|약관)|Privacy.*Policy/i.test(text || "")) {
+                    if (min_length > text.length){
+                        best_link = href;
+                        min_length = text.length;
+                    }
                 }
             }
-            return undefined;
+
+            return best_link;
         }
 
         function findPrivacyLinkUrl(element: cheerio.Cheerio): string | undefined {

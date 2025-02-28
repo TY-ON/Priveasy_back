@@ -14,7 +14,7 @@ export async function getData(url: string, browser: any): Promise<{ data: string
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
     const data = await page.content();
-    return { data, page }; // ✅ 페이지를 닫지 않고 반환
+    return { data, page }; // 페이지를 닫지 않고 반환
 }
 
 export async function crawlPrivacy(url: string): Promise<string> {
@@ -27,9 +27,12 @@ export async function crawlPrivacy(url: string): Promise<string> {
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
+
           ],    
     });
     let page;
+
+
 
     try {
         let result = await getData(url, browser);

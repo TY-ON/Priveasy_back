@@ -21,13 +21,13 @@ router.get('/', async (req: Request, res: Response) => {
         }
 
         //AI 요약 실행
-        const summary = await generateContentWithGemini(`Summarize this privacy policy:\n\n${privacyText}`);
+        const summary = await generateContentWithGemini(privacyText);
         if (!summary) {
             res.status(500).send("failed to generate summary");
             return;
         }
 
-        // 3️⃣ 최종 요약 내용 반환
+        // 최종 요약 내용 반환
         res.status(200).send(summary);
     } catch (error) {
         console.error("AI summarization error:", error);
